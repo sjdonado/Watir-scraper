@@ -76,9 +76,13 @@ class Schedule
   def hour(time)
     hour_array = time[0].split(':')
     hour = time[1] == 'PM' && hour_array[0].to_i != 12 ? hour_array[0].to_i + 6 : hour_array[0].to_i - 6
-    hour - 1
+    hour
     # response = hour.to_s + hour_array[1]
     # response
+  end
+
+  def fill_in
+
   end
 
   def schedule

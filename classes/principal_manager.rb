@@ -27,9 +27,9 @@ class PrincipalManager
     schedule = Schedule.new(ScraperModule.login_pomelo(@@bot, @@credentials[0]))
     schedule.search_schedule
     # schedule.show_schedule
-    p schedule.schedule
-    ConsoleModule.show_table(schedule.schedule)
-    @@boot.screenshot.save('/home/juan/Documents/Projects/ruby/unespacio/ss.png')
+    # p schedule.schedule
+    ConsoleModule.show_table(schedule.schedule, 20)
+    @@bot.screenshot.save('/home/juan/Documents/Projects/ruby/unespacio/ss.png')
  end
 
   def booking
@@ -44,7 +44,7 @@ class PrincipalManager
     else
       puts 'Select other room'
     end
-    @@boot.screenshot.save('/home/juan/Documents/Projects/ruby/unespacio/ss.png')
+    @@bot.screenshot.save('/home/juan/Documents/Projects/ruby/unespacio/ss.png')
   end
 
   def matrix
@@ -54,7 +54,7 @@ class PrincipalManager
       schedule.search_schedule
       ConflictMatrix.add_schedule(schedule.schedule)
     end
-    # ConsoleModule.show_table(ConflictMatrix.matrix)
-    pp ConflictMatrix.matrix
+    # pp ConflictMatrix.matrix
+    ConsoleModule.show_table(ConflictMatrix.matrix, 16)
    end
 end
