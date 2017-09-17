@@ -8,7 +8,8 @@ module ScraperModule
     pomelo:"https://pomelo.uninorte.edu.co/pls/prod/twbkwbis.P_ValLogin",
     unespacio:"http://guaymaro.uninorte.edu.co/UNEspacio/index.php?p=Index",
     find_a_room:"http://guaymaro.uninorte.edu.co/UNEspacio/index.php?p=FindRoomSS&r=1",
-    horario_pomelo: "https://pomelo.uninorte.edu.co/pls/prod/bwskfshd.P_CrseSchdDetl"
+    horario_pomelo: "https://pomelo.uninorte.edu.co/pls/prod/bwskfshd.P_CrseSchdDetl",
+    my_bookings: "http://guaymaro.uninorte.edu.co/UNEspacio/index.php?p=MyBookings&r=1"
   }
 
   def self.create_bot
@@ -18,7 +19,6 @@ module ScraperModule
   def self.create_bot_watir
     #phantomjs firefox
     browser = ::Watir::Browser.new :phantomjs
-
     browser.window.maximize
     browser
   end

@@ -13,9 +13,9 @@ while sw_cycle
     # unespacio
     manager.booking
   when 3
-    manager.matrix
+    manager.my_bookings
   when 4
-    manager.view_bookings
+    manager.matrix
   when 5
     sw_cycle = false
   else

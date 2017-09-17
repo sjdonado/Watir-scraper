@@ -1,6 +1,7 @@
 require_relative '../modules/scraper_module'
 require_relative '../modules/console_module'
 require_relative '../modules/conflict_matrix'
+require_relative 'my_bookings'
 require_relative 'schedule'
 require_relative 'book_room'
 
@@ -10,11 +11,6 @@ class PrincipalManager
 
   def initialize
     @@bot = ScraperModule.create_bot_watir
-  end
-
-  def credentials_one_user
-    credentials = ConsoleModule.get_info
-    @@credentials.store(0, credentials)
   end
 
   def credentials_users
@@ -28,18 +24,16 @@ class PrincipalManager
   end
 
   def schedule
-    credentials_one_user
-    schedule = Schedule.new(ScraperModule.login_pomelo(@@bot, @@credentials[0]))
+    schedule = Schedule.new(@@bot, ConsoleModule.get_info)
     schedule.search_schedule
     # schedule.show_schedule
     # p schedule.schedule
     ConsoleModule.show_table(schedule.schedule, 20)
-    # @@bot.screenshot.save('/home/juan/Documents/Projects/ruby/unespacio/ss.png')
+   # @@bot.screenshot.save('/home/juan/Documents/Projects/ruby/unespacio/ss.png')
  end
 
   def booking
-    credentials_one_user
-    booking_room = BookRoom.new(ScraperModule.login_unespacio(@@bot, @@credentials[0]))
+    booking_room = BookRoom.new(@@bot, ConsoleModule.get_info)
     booking_room.name_rooms
     if booking_room.booking(ConsoleModule.get_room)
       confirm_booking = booking_room.confirm_booking(ConsoleModule.get_time)
@@ -47,19 +41,25 @@ class PrincipalManager
         puts 'Error!, Room is unavailable'
         confirm_booking = booking_room.confirm_booking(ConsoleModule.get_time)
       end
+      my_bookings = MyBookings.new(@@bot)
+      my_bookings.build_table
+      ConsoleModule.show_my_bookings(my_bookings.table)
     else
       puts 'Select other room'
     end
     # @@bot.screenshot.save('/home/juan/Documents/Projects/ruby/unespacio/ss.png')
   end
 
-  def view_bookings
-    credentials_one_user
+  def my_bookings
+    my_bookings = MyBookings.new(@@bot, ConsoleModule.get_info)
+    my_bookings.build_table
+    # my_bookings.table
+    ConsoleModule.show_my_bookings(my_bookings.table)
   end
 
   def matrix
     credentials_users
-    @@credentials.each do |key, credentials|
+    @@credentials.each do |_key, credentials|
       # puts "#{key}"
       schedule = Schedule.new(ScraperModule.login_pomelo(@@bot, credentials))
       schedule.search_schedule

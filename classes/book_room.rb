@@ -4,8 +4,8 @@ class BookRoom
   @@rooms = {}
   @@time = {}
 
-  def initialize(browser)
-    @@browser = browser
+  def initialize(browser, credentials)
+    @@browser = ScraperModule.login_unespacio(browser, credentials)
   end
 
   # Print info of rooms

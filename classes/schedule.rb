@@ -1,10 +1,11 @@
 require_relative '../modules/scraper_module'
 
 class Schedule
+
   @@schedule = Array.new(6){Array.new(14)}
 
-  def initialize(browser)
-    @@browser = browser
+  def initialize(browser, credentials)
+    @@browser = ScraperModule.login_pomelo(browser, credentials)
   end
 
   # search schedule params
