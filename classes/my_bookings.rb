@@ -36,13 +36,14 @@ class MyBookings
   end
 
   def cancel_bookings(index)
-    if @@table[0][index - 1] == 'Approved'
-      @@browser.element(css: '#genericDiv > div.listDiv.initialized > table > tbody > tr:nth-child(' + i.to_s + ') > td:nth-child(7) > input').click
+    if @@table[4][index] == 'Approved'
+      @@browser.element(css: '#genericDiv > div.listDiv.initialized > table > tbody > tr:nth-child(' + index.to_s + ') > td:nth-child(7) > input').click
       @@browser.element(css: 'body > div.MessageBoxWindow > div.MessageBoxButtons.NoBorder > input:nth-child(1)').click
-      @@tablea.clear
-      build_table
+      @@table[4][index - 1] = 'Cancelled'
+      return true
     else
       puts 'Error!, the room is not approved'
+      return false
     end
   end
 

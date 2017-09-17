@@ -38,13 +38,13 @@ module ScraperModule
       browser.text_field(name: 'txtPassword').set(params[:pass])
       browser.button(id: 'btnLogin').click
       browser.refresh
+      sleep 1
       if browser.element(css: '#spanUsername').present?
         puts "Welcome " + browser.element(css: '#spanUsername').text.strip
-        browser.goto(url[:find_a_room])
         sw = false
       else
         puts "LOGIN ERROR, re-enter your credentials"
-        browser = login_unespacio(browser, ConsoleModule.get_info)
+        params = ConsoleModule.get_info
       end
     end
     browser
@@ -58,13 +58,13 @@ module ScraperModule
       browser.text_field(name: 'sid').set(params[:user])
       browser.text_field(name: 'PIN').set(params[:pass])
       browser.element(css: 'body > div.pagebodydiv > form > p > input[type="submit"]').click
+      sleep 1
       if browser.element(css: 'body > div.pagebodydiv > table:nth-child(1) > tbody > tr > td:nth-child(2)').present?
         puts "Welcome " + browser.element(css: 'body > div.pagebodydiv > table:nth-child(1) > tbody > tr > td:nth-child(2)').text.split(",")[1]
-        browser.goto(url[:horario_pomelo])
         sw = false
       else
         puts "LOGIN ERROR, re-enter your credentials"
-        browser = login_pomelo(browser, ConsoleModule.get_info)
+        params = ConsoleModule.get_info
       end
     end
     browser

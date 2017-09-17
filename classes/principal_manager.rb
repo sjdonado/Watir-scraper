@@ -10,11 +10,9 @@ class PrincipalManager
 
   def initialize
     @@bot = ScraperModule.create_bot_watir
-    @@first = true
   end
 
   def credentials_users
-    @@first = true
     @@number_users = ConsoleModule.get_number_users
     i = 0
     while i < @@number_users
@@ -25,12 +23,7 @@ class PrincipalManager
   end
 
   def schedule
-    if @@first
-      schedule = Schedule.new(@@bot, ConsoleModule.get_info)
-      @@first = false
-    else
-      schedule = Schedule.new(@@bot)
-    end
+    schedule = Schedule.new(@@bot, ConsoleModule.get_info)
     schedule.search_schedule
     # schedule.show_schedule
     # p schedule.schedule
@@ -39,12 +32,7 @@ class PrincipalManager
  end
 
   def booking
-    if @@first
-      booking_room = BookRoom.new(@@bot, ConsoleModule.get_info)
-      @@first = false
-    else
-      booking_room = BookRoom.new(@@bot)
-    end
+    booking_room = BookRoom.new(@@bot, ConsoleModule.get_info)
     booking_room.name_rooms
     sw = true
     while sw
@@ -77,8 +65,9 @@ class PrincipalManager
       case ConsoleModule.my_bookings_menu
       when 1
       when 2
-        my_bookings.cancel_bookings(ConsoleModule.my_bookings_cancel)
-        ConsoleModule.show_my_bookings(my_bookings.table)
+        if my_bookings.cancel_bookings(ConsoleModule.my_bookings_cancel)
+          ConsoleModule.show_my_bookings(my_bookings.table)
+        end
       when 3
         sw = false
       else

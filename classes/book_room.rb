@@ -10,6 +10,7 @@ class BookRoom
 
   # Print info of rooms
   def name_rooms
+    @@browser.goto(ScraperModule.url[:find_a_room])
     @@browser.element(css: '#menuContent > ul > li:nth-child(2) > ul > li:nth-child(3) > div > a').click
     @@browser.select_list(:id, 'cboLocation').select('B_58468bae-fafe-43eb-98de-f7b992f1ac2b')
     page_html = ScraperModule.parse_html(@@browser)
