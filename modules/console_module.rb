@@ -5,7 +5,7 @@ module ConsoleModule
   # Principal menu
   def self.menu
     puts 'Select a option'
-    puts ConsoleViewHelper.menu(%w[Schedule Bookings Matrix Exit], li_gap: 1)
+    puts ConsoleViewHelper.menu(%w[Schedule Bookings View bookings Matrix Exit], li_gap: 1)
     ConsoleViewHelper.input.to_i
   end
 
