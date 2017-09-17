@@ -4,8 +4,8 @@ class Schedule
 
   @@schedule = Array.new(6){Array.new(14)}
 
-  def initialize(browser, credentials)
-    @@browser = ScraperModule.login_pomelo(browser, credentials)
+  def initialize(browser, credentials = nil)
+    @@browser = credentials.nil? ? browser : ScraperModule.login_pomelo(browser, credentials)
   end
 
   # search schedule params

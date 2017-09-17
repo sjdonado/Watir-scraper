@@ -4,7 +4,7 @@ require 'date'
 module ConsoleModule
   # Principal menu
   def self.menu
-    puts 'Hi!'
+    puts 'Menu'
     puts ConsoleViewHelper.menu(%w[Schedule Bookings My-bookings Matrix Exit], li_gap: 1)
     puts 'Select a option'
     ConsoleViewHelper.input.to_i
@@ -51,6 +51,26 @@ module ConsoleModule
     ConsoleViewHelper.input
   end
 
+  def self.my_bookings_menu
+    puts ConsoleViewHelper.menu(%w[Room-Details Cancel-booking Exit], li_gap: 1)
+    ConsoleViewHelper.input.to_i
+  end
+
+  def self.my_bookings_cancel
+    puts 'Select a booking'
+    ConsoleViewHelper.input.to_i
+  end
+
+  # Allows show an array in a table form
+  def self.show_table(array, width)
+    # puts ConsoleViewHelper.table(array)
+    puts ConsoleViewHelper.table([%w(6:30AM-7:29AM 7:30AM-8:29AM 8:30AM-9:29AM 9:30AM-10:29AM 10:30AM-11:29AM 11:30AM-12:29AM 12:30AM-1:29PM 1:30PM-2:29PM 2:30PM-3:29PM 3:30PM-4:29PM 4:30PM-5:29PM 5:30PM-6:29PM 6:30PM-7:29PM 7:30PM-8:29PM), array[0], array[1], array[2], array[3], array[4], array[5]], header: %w(TIME MONDAY TUESDAY WEDNESDAY THURSDAY FRIDAY SATURDAY), cell_width: width)
+  end
+
+  def self.show_my_bookings(array)
+    puts ConsoleViewHelper.table([array[0], array[1], array[2], array[3], array[4]], header: %w(BOOKING DATE TIME REQUESTED STATUS), cell_width: 28)
+  end
+
   def self.verfify_date(year, month, day)
     sw = false
     if year.to_i < time.year
@@ -70,16 +90,6 @@ module ConsoleModule
 
   def self.time
     Time.new
-  end
-
-  # Allows show an array in a table form
-  def self.show_table(array, width)
-    # puts ConsoleViewHelper.table(array)
-    puts ConsoleViewHelper.table([%w(6:30AM-7:29AM 7:30AM-8:29AM 8:30AM-9:29AM 9:30AM-10:29AM 10:30AM-11:29AM 11:30AM-12:29AM 12:30AM-1:29PM 1:30PM-2:29PM 2:30PM-3:29PM 3:30PM-4:29PM 4:30PM-5:29PM 5:30PM-6:29PM 6:30PM-7:29PM 7:30PM-8:29PM), array[0], array[1], array[2], array[3], array[4], array[5]], header: %w(TIME MONDAY TUESDAY WEDNESDAY THURSDAY FRIDAY SATURDAY), cell_width: width)
-  end
-
-  def self.show_my_bookings(array)
-    puts ConsoleViewHelper.table([array[0], array[1], array[2], array[3], array[4]], header: %w(BOOKING DATE TIME REQUESTED STATUS), cell_width: 28)
   end
 
 end

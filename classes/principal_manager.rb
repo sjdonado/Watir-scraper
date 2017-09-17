@@ -6,14 +6,15 @@ require_relative 'schedule'
 require_relative 'book_room'
 
 class PrincipalManager
-
   @@credentials = {}
 
   def initialize
     @@bot = ScraperModule.create_bot_watir
+    @@first = true
   end
 
   def credentials_users
+    @@first = true
     @@number_users = ConsoleModule.get_number_users
     i = 0
     while i < @@number_users
@@ -24,7 +25,12 @@ class PrincipalManager
   end
 
   def schedule
-    schedule = Schedule.new(@@bot, ConsoleModule.get_info)
+    if @@first
+      schedule = Schedule.new(@@bot, ConsoleModule.get_info)
+      @@first = false
+    else
+      schedule = Schedule.new(@@bot)
+    end
     schedule.search_schedule
     # schedule.show_schedule
     # p schedule.schedule
@@ -33,19 +39,30 @@ class PrincipalManager
  end
 
   def booking
-    booking_room = BookRoom.new(@@bot, ConsoleModule.get_info)
-    booking_room.name_rooms
-    if booking_room.booking(ConsoleModule.get_room)
-      confirm_booking = booking_room.confirm_booking(ConsoleModule.get_time)
-      while confirm_booking == false
-        puts 'Error!, Room is unavailable'
-        confirm_booking = booking_room.confirm_booking(ConsoleModule.get_time)
-      end
-      my_bookings = MyBookings.new(@@bot)
-      my_bookings.build_table
-      ConsoleModule.show_my_bookings(my_bookings.table)
+    if @@first
+      booking_room = BookRoom.new(@@bot, ConsoleModule.get_info)
+      @@first = false
     else
-      puts 'Select other room'
+      booking_room = BookRoom.new(@@bot)
+    end
+    booking_room.name_rooms
+    sw = true
+    while sw
+      select_room = booking_room.booking(ConsoleModule.get_room)
+      if select_room
+        confirm_booking = booking_room.confirm_booking(ConsoleModule.get_time)
+        while confirm_booking == false
+          puts 'Error!, room in this time is unavailable'
+          confirm_booking = booking_room.confirm_booking(ConsoleModule.get_time)
+        end
+        puts 'Booking successfully'
+        my_bookings = MyBookings.new(@@bot)
+        my_bookings.build_table
+        ConsoleModule.show_my_bookings(my_bookings.table)
+        sw = false
+      else
+        puts 'Error!, room in this date is unavailable, select another room or change date'
+      end
     end
     # @@bot.screenshot.save('/home/juan/Documents/Projects/ruby/unespacio/ss.png')
   end
@@ -55,11 +72,24 @@ class PrincipalManager
     my_bookings.build_table
     # my_bookings.table
     ConsoleModule.show_my_bookings(my_bookings.table)
+    sw = true
+    while sw
+      case ConsoleModule.my_bookings_menu
+      when 1
+      when 2
+        my_bookings.cancel_bookings(ConsoleModule.my_bookings_cancel)
+        ConsoleModule.show_my_bookings(my_bookings.table)
+      when 3
+        sw = false
+      else
+        puts 'Error!'
+      end
+    end
   end
 
   def matrix
     credentials_users
-    @@credentials.each do |_key, credentials|
+    @@credentials.each do |key, credentials|
       # puts "#{key}"
       schedule = Schedule.new(ScraperModule.login_pomelo(@@bot, credentials))
       schedule.search_schedule

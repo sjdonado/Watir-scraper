@@ -4,8 +4,8 @@ class BookRoom
   @@rooms = {}
   @@time = {}
 
-  def initialize(browser, credentials)
-    @@browser = ScraperModule.login_unespacio(browser, credentials)
+  def initialize(browser, credentials = nil)
+    @@browser = credentials.nil? ? browser : ScraperModule.login_unespacio(browser, credentials)
   end
 
   # Print info of rooms
@@ -64,7 +64,7 @@ class BookRoom
       end
       i += 1
     end
-    if actum == 28
+    if acum == 28
       return false
     else
       return true

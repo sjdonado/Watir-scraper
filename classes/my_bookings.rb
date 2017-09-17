@@ -24,7 +24,7 @@ class MyBookings
       else
         status = 'Cancelled'
       end
-      @@table[0][i] = array[0]
+      @@table[0][i] = (i + 1).to_s + '.' + array[0]
       @@table[1][i] = array[1]
       @@table[2][i] = array[2]
       @@table[3][i] = array[4]
@@ -36,9 +36,17 @@ class MyBookings
   end
 
   def cancel_bookings(index)
-    if @@table[0][index] == 'Approved'
-      # crear menu en console module para eliminar, y hacer los clicks
+    if @@table[0][index - 1] == 'Approved'
+      @@browser.element(css: '#genericDiv > div.listDiv.initialized > table > tbody > tr:nth-child(' + i.to_s + ') > td:nth-child(7) > input').click
+      @@browser.element(css: 'body > div.MessageBoxWindow > div.MessageBoxButtons.NoBorder > input:nth-child(1)').click
+      @@tablea.clear
+      build_table
+    else
+      puts 'Error!, the room is not approved'
     end
+  end
+
+  def details_room
   end
 
   def table
