@@ -28,7 +28,8 @@ class PrincipalManager
     # schedule.show_schedule
     # p schedule.schedule
     ConsoleModule.show_table(schedule.schedule, 20)
-   # @@bot.screenshot.save('/home/juan/Documents/Projects/ruby/unespacio/ss.png')
+    @@bot = ScraperModule.logout(@@bot)
+    @@bot.screenshot.save('ss.png')
  end
 
   def booking
@@ -47,6 +48,7 @@ class PrincipalManager
         my_bookings = MyBookings.new(@@bot)
         my_bookings.build_table
         ConsoleModule.show_my_bookings(my_bookings.table)
+        @@bot = ScraperModule.logout(@@bot)
         sw = false
       else
         puts 'Error!, room in this date is unavailable, select another room or change date'
@@ -69,6 +71,7 @@ class PrincipalManager
           ConsoleModule.show_my_bookings(my_bookings.table)
         end
       when 3
+        @@bot = ScraperModule.logout(@@bot)
         sw = false
       else
         puts 'Error!'
@@ -86,5 +89,6 @@ class PrincipalManager
     end
     # pp ConflictMatrix.matrix
     ConsoleModule.show_table(ConflictMatrix.matrix, 16)
+    @@bot = ScraperModule.logout(@@bot)
    end
 end

@@ -10,7 +10,7 @@ class Schedule
 
   # search schedule params
   def search_schedule
-    @@browser.goto(url[:horario_pomelo])
+    @@browser.goto(ScraperModule.url[:horario_pomelo])
     select_term
     @@browser.element(css: 'body > div.pagebodydiv > form > input[type="submit"]').click
     page_html = ScraperModule.parse_html(@@browser)
