@@ -68,7 +68,7 @@ module ConsoleModule
   end
 
   def self.show_my_bookings(array)
-    puts ConsoleViewHelper.table([array[0], array[1], array[2], array[3], array[4]], header: %w(BOOKING DATE TIME REQUESTED STATUS), cell_width: 28)
+    puts ConsoleViewHelper.table([array[0], array[1], array[2], array[3], array[4]], cell_width: 28)
   end
 
   def self.verfify_date(year, month, day)
@@ -90,6 +90,10 @@ module ConsoleModule
 
   def self.time
     Time.new
+  end
+
+  def self.clean_screen
+    system('clear')
   end
 
 end

@@ -15,32 +15,28 @@ class Schedule
     @@browser.element(css: 'body > div.pagebodydiv > form > input[type="submit"]').click
     page_html = ScraperModule.parse_html(@@browser)
     page_html = page_html.css('tbody > tr')
-    i = 1
-    aux = nil
+    i = -1
     page_html.each do |n|
-      next unless n.content.include? 'Clase regular'
-      content = n.content.split("\n")
-      name_teacher = content[7].split(" ")
-      name_teacher = name_teacher[0] +  name_teacher[1]
-      aux = name_teacher if aux.nil?
-      unless name_teacher.eql? aux
-        aux = name_teacher
-        i += 2
+      if n.content.include? 'Clase regular'
+        content = n.content.split("\n")
+        name_content = page_html.xpath('/html/body/div[3]/table[' + i.to_s + ']/caption').text
+        case content[3]
+          when "L"
+            add_schedule(content[2], 0, name_content)
+          when "M"
+            add_schedule(content[2], 1, name_content)
+          when "I"
+            add_schedule(content[2], 2, name_content)
+          when "J"
+            add_schedule(content[2], 3, name_content)
+          when "V"
+            add_schedule(content[2], 4, name_content)
+          when "S"
+            add_schedule(content[2], 5, name_content)
+        end
       end
-      name_content = page_html.xpath('/html/body/div[3]/table[' + i.to_s + ']/caption').text
-      case content[3]
-      when "L"
-        add_schedule(content[2], 0, name_content)
-      when "M"
-        add_schedule(content[2], 1, name_content)
-      when "I"
-        add_schedule(content[2], 2, name_content)
-      when "J"
-        add_schedule(content[2], 3, name_content)
-      when "V"
-        add_schedule(content[2], 4, name_content)
-      when "S"
-        add_schedule(content[2], 5, name_content)
+      if n.content.include? 'Periodo Asociado'
+        i += 2
       end
     end
   end

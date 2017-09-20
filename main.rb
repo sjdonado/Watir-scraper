@@ -1,8 +1,8 @@
 require_relative 'modules/console_module'
-require_relative 'classes/principal_manager'
+require_relative 'classes/manager'
 
 sw_cycle = true
-manager = PrincipalManager.new
+manager = Manager.new
 
 while sw_cycle
   case ConsoleModule.menu

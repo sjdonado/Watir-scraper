@@ -5,7 +5,7 @@ require_relative 'my_bookings'
 require_relative 'schedule'
 require_relative 'book_room'
 
-class PrincipalManager
+class Manager
   @@credentials = {}
 
   def initialize
@@ -25,11 +25,9 @@ class PrincipalManager
   def schedule
     schedule = Schedule.new(@@bot, ConsoleModule.get_info)
     schedule.search_schedule
-    # schedule.show_schedule
-    # p schedule.schedule
     ConsoleModule.show_table(schedule.schedule, 20)
     @@bot = ScraperModule.logout(@@bot)
-    @@bot.screenshot.save('ss.png')
+    # @@bot.screenshot.save('ss.png')
  end
 
   def booking
@@ -54,28 +52,26 @@ class PrincipalManager
         puts 'Error!, room in this date is unavailable, select another room or change date'
       end
     end
-    # @@bot.screenshot.save('/home/juan/Documents/Projects/ruby/unespacio/ss.png')
   end
 
   def my_bookings
     my_bookings = MyBookings.new(@@bot, ConsoleModule.get_info)
     my_bookings.build_table
-    # my_bookings.table
     ConsoleModule.show_my_bookings(my_bookings.table)
     sw = true
     while sw
       case ConsoleModule.my_bookings_menu
-      when 1
-      when 2
-        if my_bookings.cancel_bookings(ConsoleModule.my_bookings_cancel)
-          ConsoleModule.show_my_bookings(my_bookings.table)
+        when 1
+        when 2
+          if my_bookings.cancel_bookings(ConsoleModule.my_bookings_cancel)
+            ConsoleModule.show_my_bookings(my_bookings.table)
+          end
+        when 3
+          @@bot = ScraperModule.logout(@@bot)
+          sw = false
+        else
+          puts 'Error!'
         end
-      when 3
-        @@bot = ScraperModule.logout(@@bot)
-        sw = false
-      else
-        puts 'Error!'
-      end
     end
   end
 
