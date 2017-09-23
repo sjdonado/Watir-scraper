@@ -1,13 +1,12 @@
 module ConflictMatrix
-
   @@matrix = Array.new(6) { Array.new(14) }
 
-  def self.add_schedule(schedule)
+  def self.add_schedule(schedule, credentials)
     i = 0
     schedule.each do |day|
       j = 0
       day.each do |subject|
-        @@matrix[i][j] = subject.nil? ? "0" : "1"
+        @@matrix[i][j] = credentials[:user] unless subject.nil?
         j += 1
       end
       i += 1
@@ -15,11 +14,7 @@ module ConflictMatrix
   end
 
   def self.matrix_hour_free(day, hour)
-    if(@@matrix[day(day)][hour(hour)] == 0)
-      return true
-    else
-      return false
-    end
+    @@matrix[day(day)][hour(hour)] == 0
   end
 
   # return hour to add
@@ -32,22 +27,22 @@ module ConflictMatrix
   # return day to add
   def self.day(day)
     case day
-      when "L"
-        return 0
-      when "M"
-        return 1
-      when "I"
-        return 2
-      when "J"
-        return 3
-      when "V"
-        return 4
-      when "S"
-        return 5
+    when 'L'
+      0
+    when 'M'
+      1
+    when 'I'
+      2
+    when 'J'
+      3
+    when 'V'
+      4
+    when 'S'
+      5
     end
   end
 
   def self.matrix
-		@@matrix
+    @@matrix
   end
 end

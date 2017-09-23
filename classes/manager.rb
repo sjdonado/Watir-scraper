@@ -7,32 +7,32 @@ require_relative 'schedule'
 require_relative 'book_room'
 
 class Manager
-  @@credentials = {}
 
   def initialize
-    @@bot = ScraperModule.create_bot_watir
+    @credentials = {}
+    @bot = ScraperModule.create_bot_watir
   end
 
   def credentials_users
-    @@number_users = ConsoleModule.get_number_users
+    @number_users = ConsoleModule.get_number_users
     i = 0
-    while i < @@number_users
+    while i < @number_users
       credentials = ConsoleModule.get_info
-      @@credentials.store(i.to_s, credentials)
+      @credentials.store(i.to_s, credentials)
       i += 1
     end
   end
 
   def schedule
-    schedule = Schedule.new(@@bot, ConsoleModule.get_info)
+    schedule = Schedule.new(@bot, ConsoleModule.get_info)
     schedule.search_schedule
     ConsoleModule.show_table(schedule.schedule, 20)
-    @@bot = ScraperModule.logout(@@bot)
+    @bot = ScraperModule.logout(@bot)
     # @@bot.screenshot.save('ss.png')
  end
 
   def booking
-    booking_room = BookRoom.new(@@bot, ConsoleModule.get_info)
+    booking_room = BookRoom.new(@bot, ConsoleModule.get_info)
     booking_room.name_rooms
     sw = true
     while sw
@@ -44,10 +44,10 @@ class Manager
           confirm_booking = booking_room.confirm_booking(ConsoleModule.get_time)
         end
         puts 'Booking successfully'
-        my_bookings = MyBookings.new(@@bot)
+        my_bookings = MyBookings.new(@bot)
         my_bookings.build_table
         ConsoleModule.show_my_bookings(my_bookings.table)
-        @@bot = ScraperModule.logout(@@bot)
+        @bot = ScraperModule.logout(@bot)
         sw = false
       else
         puts 'Error!, room in this date is unavailable, select another room or change date'
@@ -56,7 +56,7 @@ class Manager
   end
 
   def my_bookings
-    my_bookings = MyBookings.new(@@bot, ConsoleModule.get_info)
+    my_bookings = MyBookings.new(@bot, ConsoleModule.get_info)
     my_bookings.build_table
     ConsoleModule.show_my_bookings(my_bookings.table)
     sw = true
@@ -69,7 +69,7 @@ class Manager
             ConsoleModule.show_my_bookings(my_bookings.table)
           end
         when 3
-          @@bot = ScraperModule.logout(@@bot)
+          @bot = ScraperModule.logout(@bot)
           sw = false
         else
           puts 'Error!'
@@ -79,15 +79,15 @@ class Manager
 
   def matrix
     credentials_users
-    @@credentials.each do |key, credentials|
+    @credentials.each do |key, credentials|
       # puts "#{key}"
-      schedule = Schedule.new(ScraperModule.login_pomelo(@@bot, credentials))
+      schedule = Schedule.new(ScraperModule.login_pomelo(@bot, credentials))
       schedule.search_schedule
-      ConflictMatrix.add_schedule(schedule.schedule)
+      ConflictMatrix.add_schedule(schedule.schedule, credentials)
     end
     ConsoleModule.show_table(ConflictMatrix.matrix, 16)
     # recurring_reservation = RecurringReservation.new(@@bot, @@credentials)
     # recurring_reservation.search_hours(ConsoleModule.get_date, ConsoleModule.get_start_hour)
-    @@bot = ScraperModule.logout(@@bot)
+    @bot = ScraperModule.logout(@bot)
    end
 end

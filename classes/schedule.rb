@@ -3,18 +3,19 @@ require_relative '../modules/conflict_matrix'
 
 class Schedule
 
-  @@schedule = Array.new(6){Array.new(14)}
+  attr_reader :schedule
 
   def initialize(browser, credentials = nil)
-    @@browser = credentials.nil? ? browser : ScraperModule.login_pomelo(browser, credentials)
+    @schedule = Array.new(6){Array.new(14)}
+    @browser = credentials.nil? ? browser : ScraperModule.login_pomelo(browser, credentials)
   end
 
   # search schedule params
   def search_schedule
-    @@browser.goto(ScraperModule.url[:horario_pomelo])
+    @browser.goto(ScraperModule.url[:horario_pomelo])
     select_term
-    @@browser.element(css: 'body > div.pagebodydiv > form > input[type="submit"]').click
-    page_html = ScraperModule.parse_html(@@browser)
+    @browser.element(css: 'body > div.pagebodydiv > form > input[type="submit"]').click
+    page_html = ScraperModule.parse_html(@browser)
     page_html = page_html.css('tbody > tr')
     i = -1
     page_html.each do |n|
@@ -37,14 +38,14 @@ class Schedule
     # puts "Day: " + day + " time_start: " + time_start.to_s + " time_finish: " + time_finish.to_s + " content: " + content
     case time_finish - time_start
     when 1
-      @@schedule[day][time_start] = content
+      @schedule[day][time_start] = content
     when 2
-      @@schedule[day][time_start] = content
-      @@schedule[day][time_start + 1] = content
+      @schedule[day][time_start] = content
+      @schedule[day][time_start + 1] = content
     when 3
-      @@schedule[day][time_start] = content
-      @@schedule[day][time_start + 1] = content
-      @@schedule[day][time_start + 2] = content
+      @schedule[day][time_start] = content
+      @schedule[day][time_start + 1] = content
+      @schedule[day][time_start + 2] = content
     end
   end
 
@@ -55,15 +56,11 @@ class Schedule
     else
       select_id = time.year.to_s + '10'
     end
-    @@browser.select_list(:id, 'term_id').select(select_id)
-  end
-
-  def schedule
-    @@schedule
+    @browser.select_list(:id, 'term_id').select(select_id)
   end
 
   def show_schedule
-    @@schedule.each do |day|
+    @schedule.each do |day|
       # day.each do |subject|
       #   if subject != nil
       #     puts subject

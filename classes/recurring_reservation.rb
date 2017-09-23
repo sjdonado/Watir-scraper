@@ -3,8 +3,8 @@ require_relative '../modules/scraper_module'
 class RecurringReservation
 
   def initialize(browser, credentials)
-    @@browser = browser
-    @@credentials = credentials
+    @browser = browser
+    @credentials = credentials
   end
 
   def search_hours(params, start_time)
