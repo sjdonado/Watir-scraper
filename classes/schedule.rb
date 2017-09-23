@@ -1,4 +1,5 @@
 require_relative '../modules/scraper_module'
+require_relative '../modules/conflict_matrix'
 
 class Schedule
 
@@ -20,20 +21,7 @@ class Schedule
       if n.content.include? 'Clase regular'
         content = n.content.split("\n")
         name_content = page_html.xpath('/html/body/div[3]/table[' + i.to_s + ']/caption').text
-        case content[3]
-          when "L"
-            add_schedule(content[2], 0, name_content)
-          when "M"
-            add_schedule(content[2], 1, name_content)
-          when "I"
-            add_schedule(content[2], 2, name_content)
-          when "J"
-            add_schedule(content[2], 3, name_content)
-          when "V"
-            add_schedule(content[2], 4, name_content)
-          when "S"
-            add_schedule(content[2], 5, name_content)
-        end
+        add_schedule(content[2], ConflictMatrix.day(content[3]), name_content)
       end
       if n.content.include? 'Periodo Asociado'
         i += 2
@@ -44,8 +32,8 @@ class Schedule
   # add to matrix
   def add_schedule(time, day, content)
     array = time.split(' - ')
-    time_start = hour(array[0].split(' '))
-    time_finish = hour(array[1].split(' '))
+    time_start = ConflictMatrix.hour(array[0].split(' '))
+    time_finish = ConflictMatrix.hour(array[1].split(' '))
     # puts "Day: " + day + " time_start: " + time_start.to_s + " time_finish: " + time_finish.to_s + " content: " + content
     case time_finish - time_start
     when 1
@@ -68,19 +56,6 @@ class Schedule
       select_id = time.year.to_s + '10'
     end
     @@browser.select_list(:id, 'term_id').select(select_id)
-  end
-
-  # return hour to add
-  def hour(time)
-    hour_array = time[0].split(':')
-    hour = time[1] == 'PM' && hour_array[0].to_i != 12 ? hour_array[0].to_i + 6 : hour_array[0].to_i - 6
-    hour
-    # response = hour.to_s + hour_array[1]
-    # response
-  end
-
-  def fill_in
-
   end
 
   def schedule

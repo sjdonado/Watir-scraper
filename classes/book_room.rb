@@ -40,12 +40,12 @@ class BookRoom
   end
 
   # send params to booking
-  def booking(params)
-    if @@browser.element(css: '#ajaxRoomList > div.listDiv.initialized > table > tbody > tr:nth-child(' + params[:room].to_s + ')').present?
-      @@browser.element(css: '#ajaxRoomList > div.listDiv.initialized > table > tbody > tr:nth-child(' + params[:room].to_s + ')').click
+  def booking(room, params)
+    if @@browser.element(css: '#ajaxRoomList > div.listDiv.initialized > table > tbody > tr:nth-child(' + room.to_s + ')').present?
+      @@browser.element(css: '#ajaxRoomList > div.listDiv.initialized > table > tbody > tr:nth-child(' + room.to_s + ')').click
     else
       @@browser.element(css: '#ajaxRoomList > div:nth-child(2) > div.PageSelectorControls > div.imgNextArrow').click
-      room = params[:room].to_i - 30
+      room = room.to_i - 30
       @@browser.element(css: '#ajaxRoomList > div.listDiv.initialized > table > tbody > tr:nth-child(' + room.to_s + ')').click
     end
     @@browser.select_list(:id, 'cboDuration').select(params[:duration].to_s)

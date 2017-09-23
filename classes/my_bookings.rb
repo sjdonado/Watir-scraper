@@ -27,7 +27,7 @@ class MyBookings
       else
         status = 'Cancelled'
       end
-      row = [(i + 1).to_s + '.' + array[0], array[1], array[2], array[4], status]
+      row = [i.to_s + '.' + array[0], array[1], array[2], array[4], status]
       row.each_with_index do |content, index|
         @@table[index][i] = content
       end
@@ -48,7 +48,13 @@ class MyBookings
     end
   end
 
-  def details_room
+  def details_room(index)
+    @@browser.element(:xpath => '//*[@id="genericDiv"]/div[4]/table/tbody/tr[' + index.to_s + ']').click
+    @@browser.element(:xpath => '//*[@id="requestInfo"]/div/div/table[3]/tbody/tr[2]/td/div/table/tbody/tr[2]/td[1]/span/a').click
+    puts ""
+    puts 'Capacity: ' + @@browser.element(:xpath => '//*[@id="roomConfigTable"]/table/tbody/tr/td[1]/table/tbody/tr[3]/td[2]').text
+    puts 'Description: ' + @@browser.element(:xpath => '//*[@id="roomConfigTable"]/table/tbody/tr/td[1]/table/tbody/tr[5]/td[2]/span').text
+    puts ""
   end
 
   def table

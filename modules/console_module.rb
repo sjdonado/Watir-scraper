@@ -26,10 +26,13 @@ module ConsoleModule
     ConsoleViewHelper.input.to_i
   end
 
-  # Room's params
   def self.get_room
     puts 'Room Number'
-    room = ConsoleViewHelper.input
+    ConsoleViewHelper.input
+  end
+
+  # Time's params
+  def self.get_date
     sw = true
     while sw
       puts 'Year (2017, 2018, 2019...)'
@@ -43,11 +46,16 @@ module ConsoleModule
     puts 'Duration (30, 60, 90...) minutes'
     duration = ConsoleViewHelper.input
     puts 'Loading...'
-    { room: room, duration: duration, month: Date::MONTHNAMES[month.to_i] + ' ' + year, day: day }
+    { duration: duration, month: Date::MONTHNAMES[month.to_i] + ' ' + year, day: day }
   end
 
   def self.get_time
     puts 'Time'
+    ConsoleViewHelper.input
+  end
+
+  def self.get_start_hour
+    puts 'Start hour (2:30PM, 12:30AM, 7:00AM...)'
     ConsoleViewHelper.input
   end
 
@@ -56,7 +64,7 @@ module ConsoleModule
     ConsoleViewHelper.input.to_i
   end
 
-  def self.my_bookings_cancel
+  def self.my_bookings_select
     puts 'Select a booking'
     ConsoleViewHelper.input.to_i
   end

@@ -1,6 +1,7 @@
 require_relative '../modules/scraper_module'
 require_relative '../modules/console_module'
 require_relative '../modules/conflict_matrix'
+require_relative 'recurring_reservation'
 require_relative 'my_bookings'
 require_relative 'schedule'
 require_relative 'book_room'
@@ -35,7 +36,7 @@ class Manager
     booking_room.name_rooms
     sw = true
     while sw
-      select_room = booking_room.booking(ConsoleModule.get_room)
+      select_room = booking_room.booking(ConsoleModule.get_room, ConsoleModule.get_date)
       if select_room
         confirm_booking = booking_room.confirm_booking(ConsoleModule.get_time)
         while confirm_booking == false
@@ -62,8 +63,9 @@ class Manager
     while sw
       case ConsoleModule.my_bookings_menu
         when 1
+          my_bookings.details_room(ConsoleModule.my_bookings_select)
         when 2
-          if my_bookings.cancel_bookings(ConsoleModule.my_bookings_cancel)
+          if my_bookings.cancel_bookings(ConsoleModule.my_bookings_select)
             ConsoleModule.show_my_bookings(my_bookings.table)
           end
         when 3
@@ -83,8 +85,9 @@ class Manager
       schedule.search_schedule
       ConflictMatrix.add_schedule(schedule.schedule)
     end
-    # pp ConflictMatrix.matrix
     ConsoleModule.show_table(ConflictMatrix.matrix, 16)
+    # recurring_reservation = RecurringReservation.new(@@bot, @@credentials)
+    # recurring_reservation.search_hours(ConsoleModule.get_date, ConsoleModule.get_start_hour)
     @@bot = ScraperModule.logout(@@bot)
    end
 end
