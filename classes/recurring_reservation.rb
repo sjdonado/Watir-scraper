@@ -7,17 +7,10 @@ class RecurringReservation
     @credentials = credentials
   end
 
-  def search_hours(params, start_time)
-    duration = params[:duration].to_i
-    while duration < 0
-      array_time = start_time.split(':')
-      if array[1].include? 'AM'
-        minutes = array[1].split('AM')[0] + duration
-      else
-      end
-      hour = array[0] +
-      matrix_hour_free(params[:day], params)
-    end
+  def search_hours(duration)
+    time = duration.to_f/60
+    time = time % 1 == 0.5 ? time + 0.5 : time/60
+    time.to_i
   end
 
 end

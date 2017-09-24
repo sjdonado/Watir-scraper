@@ -6,7 +6,13 @@ module ConflictMatrix
     schedule.each do |day|
       j = 0
       day.each do |subject|
-        @@matrix[i][j] = credentials[:user] unless subject.nil?
+        unless subject.nil?
+          if @@matrix[i][j] == ''
+            @@matrix[i][j] = credentials[:user]
+          else
+            @@matrix[i][j] += ' - ' + credentials[:user]
+          end
+        end
         j += 1
       end
       i += 1
@@ -14,7 +20,7 @@ module ConflictMatrix
   end
 
   def self.matrix_hour_free(day, hour)
-    @@matrix[day(day)][hour(hour)] == 0
+    @@matrix[day(day)][hour(hour)].nil? || @@matrix[day(day)][hour(hour)] == ''
   end
 
   # return hour to add
