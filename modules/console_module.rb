@@ -46,7 +46,10 @@ module ConsoleModule
     puts 'Duration (30, 60, 90...) minutes'
     duration = ConsoleViewHelper.input
     puts 'Loading...'
-    { duration: duration, month: Date::MONTHNAMES[month.to_i] + ' ' + year, day: day }
+    date = Date.parse(day + '-' + month + '-' + year)
+    date_array = date.strftime("%A").split('')
+    puts date = date_array[0] + date_array[1] + date_array[2]
+    { duration: duration, month: Date::MONTHNAMES[month.to_i] + ' ' + year, day: day, day_name: date}
   end
 
   def self.get_time

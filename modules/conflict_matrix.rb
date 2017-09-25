@@ -1,4 +1,5 @@
 module ConflictMatrix
+
   @@matrix = Array.new(6) { Array.new(14) }
 
   def self.add_schedule(schedule, credentials)
@@ -7,7 +8,7 @@ module ConflictMatrix
       j = 0
       day.each do |subject|
         unless subject.nil?
-          if @@matrix[i][j] == ''
+          if @@matrix[i][j].nil?
             @@matrix[i][j] = credentials[:user]
           else
             @@matrix[i][j] += ' - ' + credentials[:user]
@@ -20,7 +21,7 @@ module ConflictMatrix
   end
 
   def self.matrix_hour_free(day, hour)
-    @@matrix[day(day)][hour(hour)].nil? || @@matrix[day(day)][hour(hour)] == ''
+    @@matrix[day(day)][hour(hour)].nil?
   end
 
   # return hour to add
@@ -35,15 +36,27 @@ module ConflictMatrix
     case day
     when 'L'
       0
+    when 'Mon'
+      0
     when 'M'
+      1
+    when 'Tue'
       1
     when 'I'
       2
+    when 'Wed'
+      2
     when 'J'
+      3
+    when 'Thu'
       3
     when 'V'
       4
+    when 'Fri'
+      4
     when 'S'
+      5
+    when 'Sat'
       5
     end
   end
@@ -51,4 +64,5 @@ module ConflictMatrix
   def self.matrix
     @@matrix
   end
+
 end

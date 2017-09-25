@@ -86,8 +86,8 @@ class Manager
       ConflictMatrix.add_schedule(schedule.schedule, credentials)
     end
     ConsoleModule.show_table(ConflictMatrix.matrix, 16)
-    # recurring_reservation = RecurringReservation.new(@@bot, @@credentials)
-    # recurring_reservation.search_hours(ConsoleModule.get_date, ConsoleModule.get_start_hour)
+    recurring_reservation = RecurringReservation.new(@bot, @credentials)
+    recurring_reservation.search_hours(ConsoleModule.get_date, ConsoleModule.get_start_hour)
     @bot = ScraperModule.logout(@bot)
    end
 end
