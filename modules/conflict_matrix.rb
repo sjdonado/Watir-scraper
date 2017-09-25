@@ -26,6 +26,7 @@ module ConflictMatrix
 
   # return hour to add
   def self.hour(time)
+    puts time
     hour_array = time[0].split(':')
     hour = time[1] == 'PM' && hour_array[0].to_i != 12 ? hour_array[0].to_i + 6 : hour_array[0].to_i - 6
     hour
