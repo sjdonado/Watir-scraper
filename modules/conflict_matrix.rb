@@ -21,12 +21,11 @@ module ConflictMatrix
   end
 
   def self.matrix_hour_free(day, hour)
-    @@matrix[day(day)][hour(hour)].nil?
+    @@matrix[day(day)][hour(hour) + 1].nil?
   end
 
   # return hour to add
   def self.hour(time)
-    puts time
     hour_array = time[0].split(':')
     hour = time[1] == 'PM' && hour_array[0].to_i != 12 ? hour_array[0].to_i + 6 : hour_array[0].to_i - 6
     hour

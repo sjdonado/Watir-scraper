@@ -19,17 +19,20 @@ class RecurringReservation
       time_start.slice! 'PM'
       time_format = 'PM'
     end
+    unless time_start.include? '30'
+      time_start = time_start.split(':')[0] + ':' + '30'
+    end
     time_variable = time_start.split(':')[0].to_i
     i = 1
     while time > 0
       time_verify = time_variable.to_s + ':' + time_start.split(':')[1] + ' ' + time_format
-      @time[i] = time_verify.to_s
       if ConflictMatrix.matrix_hour_free(params[:day_name], time_verify.split(' '))
         puts i.to_s + ')' + time_verify.to_s
+        @time[i] = time_verify.to_s
+        i += 1
       end
       time_variable += 1
       time -= 1
-      i += 1
     end
   end
 end
