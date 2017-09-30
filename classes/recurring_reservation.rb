@@ -9,7 +9,6 @@ class RecurringReservation
     ScraperModule.login_unespacio(@browser, @credentials[0])
     @browser.goto('http://guaymaro.uninorte.edu.co/UNEspacio/index.php?p=FindRoomSS&r=1')
     @browser.select_list(:id, 'cboLocation').select('B_58468bae-fafe-43eb-98de-f7b992f1ac2b')
-    @time = {}
   end
 
   def search_hours(params, time_start)
@@ -39,14 +38,39 @@ class RecurringReservation
     if i == 1
       puts 'This day is unavailable'
     else
+      @time = time_final
       @browser.select_list(:id, 'cboStartTime').select((ConflictMatrix.hour(time_final.split(' '))*60+390).to_s)
       @browser.element(css: '#btnAnyDate').click
       BookRoom.search_day(@browser, params[:day], BookRoom.search_month(@browser, params[:month]))
+      name_rooms
     end
   end
 
   def name_rooms
+    @browser.screenshot.save('ss.png')
     page_html = ScraperModule.parse_html(@browser)
-    # page_html. tr.ClickableRow:nth-child(1)
+    i = 1
+    name_first = nil
+    page_html.css('tr').each do |element|
+      if element.text.strip.include? 'BKCP'
+        text = element.text.strip
+        text.slice! 'PBKCP'
+        text.slice! 'CUBDetail'
+        if name_first.nil?
+          name_first = text
+        else
+          if name_first != text
+            puts i.to_s + ') ' + text
+            i += 1
+          else
+            break;
+          end
+        end
+      end
+    end
+    @browser.element(:xpath => '//*[@id="secAvailability' + @time + '"]/div/div/div[3]/table/tbody/tr[' + ConsoleModule.get_time.to_s + ']').click
+    @browser.element(css: 'body > div.MessageBoxWindow > div.MessageBoxButtons.NoBorder > input:nth-child(1)').click
+    @browser.element(css: '#btnConfirm').click
+    @browser.element(css: 'body > div.MessageBoxWindow > div.MessageBoxButtons.NoBorder > input:nth-child(1)').click
   end
 end

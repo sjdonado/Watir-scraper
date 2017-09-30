@@ -88,6 +88,10 @@ class Manager
     ConsoleModule.show_table(ConflictMatrix.matrix, 16)
     recurring_reservation = RecurringReservation.new(@bot, @credentials)
     recurring_reservation.search_hours(ConsoleModule.get_date, ConsoleModule.get_start_hour)
+    puts 'Booking successfully'
+    my_bookings = MyBookings.new(@bot)
+    my_bookings.build_table
+    ConsoleModule.show_my_bookings(my_bookings.table)
     @bot = ScraperModule.logout(@bot)
    end
 end
