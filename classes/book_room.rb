@@ -50,7 +50,7 @@ class BookRoom
     end
     @browser.select_list(:id, 'cboDuration').select(params[:duration].to_s)
     @browser.element(css: '#btnAnyDate').click
-    search_day(params[:day], search_month(params[:month]))
+    BookRoom.search_day(@browser, params[:day], BookRoom.search_month(@browser, params[:month]))
     page_html = ScraperModule.parse_html(@browser)
     i = 1
     acum = 1
@@ -74,33 +74,33 @@ class BookRoom
 
   # search month
 
-  def search_month(month)
+  def self.search_month(browser, month)
     i = 0
     sw = false
     while sw == false
       if i < 2
         # puts @@browser.element(css: '#availabilityCalendar' + i.to_s + ' > table > tbody > tr:nth-child(1) > td > b').text
-        if @browser.element(css: '#availabilityCalendar' + i.to_s + ' > table > tbody > tr:nth-child(1) > td > b').text.eql? month
+        if browser.element(css: '#availabilityCalendar' + i.to_s + ' > table > tbody > tr:nth-child(1) > td > b').text.eql? month
           sw = true
         else
           i += 1
         end
       else
         i = 0
-        @browser.element(css: '#availabilityCalendarTable > tbody > tr > td:nth-child(3)').click
+        browser.element(css: '#availabilityCalendarTable > tbody > tr > td:nth-child(3)').click
       end
     end
     i
   end
 
   # search day in the calendar
-  def search_day(day, month)
+  def self.search_day(browser, day, month)
     sw = true
     i = 3
     while sw && i <= 7
       j = 1
       while j <= 7
-        clickeable = @browser.element(css: '#availabilityCalendar' + month.to_s + ' > table > tbody > tr:nth-child(' + i.to_s + ') > td:nth-child(' + j.to_s + ')')
+        clickeable = browser.element(css: '#availabilityCalendar' + month.to_s + ' > table > tbody > tr:nth-child(' + i.to_s + ') > td:nth-child(' + j.to_s + ')')
         if clickeable.text.to_s == day.to_s
           sw = false
           clickeable.click

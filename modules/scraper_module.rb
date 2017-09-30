@@ -17,7 +17,7 @@ module ScraperModule
 
   def self.create_bot_watir
     # phantomjs firefox
-    browser = ::Watir::Browser.new :phantomjs
+    browser = ::Watir::Browser.new :firefox
     browser.window.maximize
     browser
   end

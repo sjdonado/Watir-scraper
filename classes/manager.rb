@@ -18,7 +18,7 @@ class Manager
     i = 0
     while i < @number_users
       credentials = ConsoleModule.get_info
-      @credentials.store(i.to_s, credentials)
+      @credentials.store(i, credentials)
       i += 1
     end
   end
