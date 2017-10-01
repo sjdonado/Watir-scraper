@@ -21,7 +21,11 @@ module ConflictMatrix
   end
 
   def self.matrix_hour_free(day, hour)
-    @@matrix[day(day)][hour(hour) + 1].nil?
+    if day(day).nil? || hour(hour).nil?
+      return nil
+    else
+      return @@matrix[day(day)][hour(hour) + 1].nil?
+    end
   end
 
   # return hour to add

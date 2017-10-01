@@ -12,6 +12,7 @@ class RecurringReservation
   end
 
   def search_hours(params, time_start)
+    error = false
     @browser.select_list(:id, 'cboDuration').select(params[:duration])
     time = (params[:duration].to_f / 60).to_f
     time = time % 1 == 0.5 ? (time + 0.5).to_i : time.to_i
@@ -31,11 +32,16 @@ class RecurringReservation
     i = 1
     while time > 0
       time_verify = time_variable.to_s + ':' + time_start.split(':')[1] + ' ' + time_format
-      i += 1 if !ConflictMatrix.matrix_hour_free(params[:day_name], time_verify.split(' ')).nil? && ConflictMatrix.matrix_hour_free(params[:day_name], time_verify.split(' '))
-      time_variable += 1
-      time -= 1
+      if ConflictMatrix.matrix_hour_free(params[:day_name], time_verify.split(' ')).nil?
+        error = true
+        break
+      else
+        i += 1 if ConflictMatrix.matrix_hour_free(params[:day_name], time_verify.split(' '))
+        time_variable += 1
+        time -= 1
+      end
     end
-    if i == 1
+    if i == 1 || !error
       puts 'This day is unavailable'
     else
       @time = time_final
@@ -47,7 +53,6 @@ class RecurringReservation
   end
 
   def name_rooms
-    @browser.screenshot.save('ss.png')
     page_html = ScraperModule.parse_html(@browser)
     i = 1
     name_first = nil
@@ -68,9 +73,15 @@ class RecurringReservation
         end
       end
     end
-    @browser.element(:xpath => '//*[@id="secAvailability' + @time + '"]/div/div/div[3]/table/tbody/tr[' + ConsoleModule.get_time.to_s + ']').click
-    @browser.element(css: 'body > div.MessageBoxWindow > div.MessageBoxButtons.NoBorder > input:nth-child(1)').click
-    @browser.element(css: '#btnConfirm').click
-    @browser.element(css: 'body > div.MessageBoxWindow > div.MessageBoxButtons.NoBorder > input:nth-child(1)').click
+    if name_first.nil?
+      puts 'This start hour is unavailable'
+      return false
+    else
+      @browser.element(:xpath => '//*[@id="secAvailability' + @time + '"]/div/div/div[3]/table/tbody/tr[' + ConsoleModule.get_time.to_s + ']').click
+      @browser.element(css: 'body > div.MessageBoxWindow > div.MessageBoxButtons.NoBorder > input:nth-child(1)').click
+      @browser.element(css: '#btnConfirm').click
+      @browser.element(css: 'body > div.MessageBoxWindow > div.MessageBoxButtons.NoBorder > input:nth-child(1)').click
+      return true
+    end
   end
 end
