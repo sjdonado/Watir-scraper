@@ -41,7 +41,7 @@ class RecurringReservation
         time -= 1
       end
     end
-    if i == 1 || !error
+    if i == 1 || error
       puts 'This day is unavailable'
     else
       @time = time_final

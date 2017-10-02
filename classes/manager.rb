@@ -26,7 +26,7 @@ class Manager
   def schedule
     schedule = Schedule.new(@bot, ConsoleModule.get_info)
     schedule.search_schedule
-    ConsoleModule.show_table(schedule.schedule, 20)
+    ConsoleModule.show_table(schedule.schedule, 18)
     @bot = ScraperModule.logout(@bot)
     # @@bot.screenshot.save('ss.png')
  end
