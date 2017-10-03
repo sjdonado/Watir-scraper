@@ -77,7 +77,7 @@ class RecurringReservation
       puts 'This start hour is unavailable'
       return false
     else
-      @browser.element(:xpath => '//*[@id="secAvailability' + @time + '"]/div/div/div[3]/table/tbody/tr[' + ConsoleModule.get_time.to_s + ']').click
+      @browser.element(:xpath => '//*[@id="secAvailability' + @time + '"]/div/div/div[3]/table/tbody/tr[' + (ConsoleModule.get_time.to_i + 1).to_s + ']').click
       @browser.element(css: 'body > div.MessageBoxWindow > div.MessageBoxButtons.NoBorder > input:nth-child(1)').click
       @browser.element(css: '#btnConfirm').click
       @browser.element(css: 'body > div.MessageBoxWindow > div.MessageBoxButtons.NoBorder > input:nth-child(1)').click
